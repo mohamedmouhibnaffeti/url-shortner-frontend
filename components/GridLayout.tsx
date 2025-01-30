@@ -3,16 +3,24 @@
 import { cn } from "@/lib/utils";
 import { GridPattern } from "@/components/ui/grid-pattern";
 import { useState } from "react";
-import { checkIsURL } from "@/helpers/string";
+import { toast } from "sonner"
+import { shortenUrl } from "@/helpers/APIs";
+import { LinkIcon, CopyIcon } from "lucide-react"
+import { CopyString } from "@/helpers/string";
 
 export function GridPatternComponent() {
   const [url, setUrl] = useState("")
-  const checkURL = () => {
-    const state = checkIsURL(url)
-    if(state) {
-      alert("Valid URL")
-    } else {
-      alert("Invalid URL")
+  const SendRequest = async() => {
+    const response = await shortenUrl(url)
+    if(response.success){
+      toast.success(`${response.data}`, {
+        action: {
+          label: <CopyIcon className="w-4 h-4" />,
+          onClick: () => CopyString(response.data as string),
+        },
+      })
+    }else{
+      toast.error(`${response.message}`)
     }
   }
   return (
@@ -30,7 +38,7 @@ export function GridPatternComponent() {
           className="z-10 md:w-96 w-full px-4 py-2 text-lg text-white bg-black/20 border focus:border-none rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-r- transition-all duration-150"
         />
         <button
-          onClick={checkURL}
+          onClick={SendRequest}
           disabled={!url}
           className={cn(
             "z-10 px-6 py-2 text-lg text-white bg-blue-500 border border-blue-500 rounded-lg rounded-l- transition-all duration-150 w-fit",
