@@ -5,7 +5,7 @@ import { GridPattern } from "@/components/ui/grid-pattern";
 import { useState } from "react";
 import { toast } from "sonner"
 import { shortenUrl } from "@/helpers/APIs";
-import { LinkIcon, CopyIcon } from "lucide-react"
+import { CopyIcon } from "lucide-react"
 import { CopyString } from "@/helpers/string";
 
 export function GridPatternComponent() {
