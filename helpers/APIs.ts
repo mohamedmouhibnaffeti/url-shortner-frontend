@@ -6,7 +6,7 @@ export const shortenUrl = async (originalUrl: string): Promise<{success: boolean
     if(!checkIsURL(originalUrl)){
         return {success: false, message: "Invalid URL"}
     }
-    const response = await fetch(`${process.env.BACKEND_URL}/api/`, {
+    const response = await fetch(`${process.env.BACKEND_URL}/api/shorten`, {
         method: "POST",
         headers: {
         "Content-Type": "application/json",
