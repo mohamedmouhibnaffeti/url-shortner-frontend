@@ -2,7 +2,7 @@
 
 import { checkIsURL } from "./string";
 
-export const shortenUrl = async (originalUrl: string): Promise<{success: boolean, data?: string, message?: string}> => {
+export const shortenUrl = async (originalUrl: string): Promise<{success: boolean, data?: string, message?: string, qrcode?: string}> => {
     if(!checkIsURL(originalUrl)){
         return {success: false, message: "Invalid URL"}
     }
@@ -17,6 +17,6 @@ export const shortenUrl = async (originalUrl: string): Promise<{success: boolean
         return {success: false, message: "Failed to shorten URL"}
     }else{
         const data = await response.json()
-        return {success: true, data: data.shortUrl}
+        return {success: true, data: data.shortUrl, qrcode: data.qrCode}
     }
 }

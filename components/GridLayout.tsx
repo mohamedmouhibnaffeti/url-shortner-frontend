@@ -5,14 +5,19 @@ import { GridPattern } from "@/components/ui/grid-pattern";
 import { useState } from "react";
 import { toast } from "sonner"
 import { shortenUrl } from "@/helpers/APIs";
-import { CopyIcon } from "lucide-react"
+import { CopyIcon, DownloadIcon } from "lucide-react"
 import { CopyString } from "@/helpers/string";
+import Image from "next/image";
 
 export function GridPatternComponent() {
   const [url, setUrl] = useState("")
+  const [QrCode, setQrCode] = useState("")
   const SendRequest = async() => {
+    setQrCode("")
     const response = await shortenUrl(url)
     if(response.success){
+      console.log(response)
+      setQrCode(response.qrcode as string)
       toast.success(`${response.data}`, {
         action: {
           label: <CopyIcon className="w-4 h-4" />,
@@ -24,14 +29,14 @@ export function GridPatternComponent() {
     }
   }
   return (
-    <div className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden rounded-lg bg-background md:shadow-xl bg-black gap-6">
+    <div className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden rounded-lg bg-background md:shadow-xl bg-black gap-6">
       <h1 className="z-10 md:text-6xl text-4xl font-bold text-white text-center tracking-wide">
         🚀 Shorten. Share. Track.
       </h1>
       <h3 className="z-10 md:text-2xl text-lg text-white text-center tracking-wide">
         Turn long links into sleek, shareable URLs.<br />fast, simple, and powerful.
       </h3>
-      <div className="flex gap-4 md:gap-2 w-full max-md:flex-col justify-center items-center">
+      <div className="flex gap-4 md:gap-2 w-full max-md:flex-col justify-center items-center max-md:px-4">
         <input
           type="text"
           onChange={(e) => setUrl(e.target.value)}
@@ -47,6 +52,25 @@ export function GridPatternComponent() {
             Convert
           </button>
       </div>
+      {
+        QrCode && (
+          <div className="flex flex-col gap-4 items-center justify-center">
+            <Image
+              src={`${QrCode}`}
+              alt="QR Code"
+              className="z-10 mt-4 w-72 h-72"
+              width={100}
+              height={100}
+            />
+            <a
+              className="flex justify-center items-center py-2 px-4 gap-2 text-white bg-gray-600 rounded-md hover:bg-gray-500 active:bg-gray-700 transition-all duration-150"
+              href={`${QrCode}`} download="qrcode.png"
+            >
+              Download <DownloadIcon className="w-4 h-4" />
+            </a>
+          </div>
+        )
+      }
       <GridPattern
         squares={[
           [4, 4],
